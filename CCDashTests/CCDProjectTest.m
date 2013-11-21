@@ -18,6 +18,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <OCMock/OCMock.h>
 
 #import "CCDProject.h"
 
@@ -32,12 +33,12 @@ CCDProject *project;
 - (void)setUp
 {
     [super setUp];
-    project = [[CCDProject alloc]init];
+    project = [[CCDProject alloc] init];
 }
 
 - (void)tearDown
 {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    [super tearDown];
 }
 
 - (void)testProjectsShouldReturnListOfObjectsThatBehaveLikeProject
@@ -48,6 +49,36 @@ CCDProject *project;
     XCTAssertTrue([project respondsToSelector:@selector(label)]);
     XCTAssertTrue([project respondsToSelector:@selector(time)]);
     XCTAssertTrue([project respondsToSelector:@selector(url)]);
+}
+
+- (void)testProjectFromXMLElementShouldPopulateProperties
+{
+    CCDProject *project = [[CCDProject alloc] initFromXMLElement:[self mockXMLElement]];
+    XCTAssertEqualObjects(@"Onomatopoeia", [project name]);
+    XCTAssertEqualObjects(@"Fondling", [project activity]);
+    XCTAssertEqualObjects(@"Regal", [project buildStatus]);
+    XCTAssertEqualObjects(@"Price", [project label]);
+    XCTAssertEqualObjects(@"Cowboy", [project time]);
+    XCTAssertEqualObjects(@"Gray", [project url]);
+}
+
+- (id)mockXMLElement
+{
+    id mockXMLElement = [OCMockObject mockForClass:[NSXMLElement class]];
+    [self stubElement:mockXMLElement forAttribute:@"name" thatReturns:@"Onomatopoeia"];
+    [self stubElement:mockXMLElement forAttribute:@"activity" thatReturns:@"Fondling"];
+    [self stubElement:mockXMLElement forAttribute:@"lastBuildStatus" thatReturns:@"Regal"];
+    [self stubElement:mockXMLElement forAttribute:@"lastBuildLabel" thatReturns:@"Price"];
+    [self stubElement:mockXMLElement forAttribute:@"lastBuildTime" thatReturns:@"Cowboy"];
+    [self stubElement:mockXMLElement forAttribute:@"webUrl" thatReturns:@"Gray"];
+    return mockXMLElement;
+}
+
+- (void)stubElement:(id)anElement forAttribute:(NSString*)anAttribute thatReturns:(NSString*)aString
+{
+    id mockXMLNode = [OCMockObject mockForClass:[NSXMLNode class]];
+    [[[mockXMLNode stub] andReturn:aString] stringValue];
+    [[[anElement stub] andReturn:mockXMLNode] attributeForName:anAttribute];
 }
 
 @end

@@ -21,4 +21,18 @@
 
 @implementation CCDProject
 
+- (id)initFromXMLElement:(NSXMLElement*)anElement
+{
+    self = [super init];
+    if (self) {
+        [self setName:[[anElement attributeForName:@"name"] stringValue]];
+        [self setActivity:[[anElement attributeForName:@"activity"] stringValue]];
+        [self setBuildStatus:[[anElement attributeForName:@"lastBuildStatus"] stringValue]];
+        [self setLabel:[[anElement attributeForName:@"lastBuildLabel"] stringValue]];
+        [self setTime:[[anElement attributeForName:@"lastBuildTime"] stringValue]];
+        [self setUrl:[[anElement attributeForName:@"webUrl"] stringValue]];
+    }
+    return self;
+}
+
 @end

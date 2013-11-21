@@ -21,6 +21,8 @@
 
 @interface CCDProject : NSObject
 
+- (id)initFromXMLElement:(NSXMLElement*)anElement;
+
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *activity;
 @property (nonatomic) NSString *buildStatus;

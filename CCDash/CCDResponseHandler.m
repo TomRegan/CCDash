@@ -22,19 +22,11 @@
 
 @implementation CCDResponseHandler
 
-+(NSArray*)projectsFromXML:(NSXMLDocument *)aDocument
++ (NSArray*)projectsFromXML:(NSXMLDocument *)aDocument
 {
-    NSMutableArray *projects = [[NSMutableArray alloc]init];
-    // FIXME we need to handle the possibility of case inconsistancies
+    NSMutableArray *projects = [[NSMutableArray alloc] init];
     for (NSXMLElement *element in [[aDocument rootElement] elementsForName:@"Project"]) {
-        CCDProject *project = [[CCDProject alloc]init];
-        [project setName:[[element attributeForName:@"name"] stringValue]];
-        [project setActivity:[[element attributeForName:@"activity"] stringValue]];
-        [project setBuildStatus:[[element attributeForName:@"lastBuildStatus"] stringValue]];
-        [project setLabel:[[element attributeForName:@"lastBuildLabel"] stringValue]];
-        [project setTime:[[element attributeForName:@"lastBuildTime"] stringValue]];
-        [project setUrl:[[element attributeForName:@"webUrl"] stringValue]];
-        [projects addObject:project];
+        [projects addObject:[[CCDProject alloc]initFromXMLElement:element]];
     }
     return [NSArray arrayWithArray:projects];
 }

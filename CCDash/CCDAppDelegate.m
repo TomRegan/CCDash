@@ -19,6 +19,7 @@
 
 #import "CCDAppDelegate.h"
 #import "CCDHTTPRequest.h"
+#import "CCDResponseHandler.h"
 
 @implementation CCDAppDelegate
 
